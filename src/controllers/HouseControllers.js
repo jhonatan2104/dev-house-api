@@ -4,7 +4,24 @@ import { badRequest, successRequest } from '../helpers/http-helpers';
 
 import House from '../models/House';
 
+// import { Request, Response } from 'express';
+
 class HouseControllers {
+  index (req, res) {
+    const { status } = req.query;
+    if (status) {
+      House.find({ status })
+        .then((houses) => {
+          return res.status(200).json(successRequest(houses));
+        })
+        .catch((err) => {
+          return res.status(500).json(badRequest('Error SERVER: list houses ', 500));
+        })
+    } else {
+      return res.status(400).json(badRequest('status not found'));
+    }
+  }
+
   store (req, res) {
     const validateBody = validate(req.body, schemaStore);
 
