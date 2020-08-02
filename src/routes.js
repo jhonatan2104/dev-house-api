@@ -13,6 +13,8 @@ router.post('/sessions', SessionControllers.store);
 
 router.post('/houses', upload.single('thumbnail'), HouseControllers.store);
 router.get('/houses', HouseControllers.index);
+router.put('/houses/:house_id', upload.single('thumbnail'), HouseControllers.update);
+
 
 
 export default router;

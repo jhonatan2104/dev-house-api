@@ -1,9 +1,10 @@
 import { validate } from 'jsonschema';
 import schemaStore from '../validations/House/schemaStore.json';
 import { badRequest, successRequest } from '../helpers/http-helpers';
-import { MissingError, RequestDatabaseError} from '../errors';
+import { MissingError, RequestDatabaseError, UnauthorizedError} from '../errors';
 
 import House from '../models/House';
+import User from '../models/User';
 
 // import { Request, Response } from 'express';
 
@@ -67,6 +68,55 @@ class HouseControllers {
           badRequest(new MissingError('user_id','headers'))
         )
       }
+    }
+  }
+
+  async update (req, res) {
+    const { house_id } = req.params;
+    const { user_id } = req.headers;
+    if (house_id && user_id) {
+      try {
+        const user = await User.findById(user_id);
+        const house = await House.findById(house_id);
+
+        if (String(user._id) === String(house.user)) {
+          const validateBody = validate(req.body, schemaStore);
+
+          if(validateBody.valid == false) {
+            return res.status(400).json(
+              badRequest(
+                new MissingError("[description, price, location, status]", 'body')
+              )
+            );
+          } else {
+            const { filename } = req.file;
+            const { description, price, location, status } = req.body;
+
+            await House.updateOne({ _id: house_id }, {
+              thumbnail: filename,
+              description,
+              price,
+              location,
+              status,
+              user:user_id
+            });
+
+            return res.status(200).json(successRequest('House updated'))
+          }
+        } else {
+          return res.status(401).json(
+            badRequest(new UnauthorizedError(user._id), 401)
+          )
+        }
+      } catch (error) {
+        return res.status(400).json(
+          badRequest(new RequestDatabaseError('findById', '[User, House]'))
+        )
+      }
+    } else {
+      return res.status(400).json(
+        badRequest(new MissingError('[house_id, user_id]', '[params, headers]'))
+      )
     }
   }
 }

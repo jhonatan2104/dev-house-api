@@ -11,3 +11,9 @@ export class RequestDatabaseError extends Error {
     this.name = 'RequestDatabaseError'
   }
 }
+
+export class UnauthorizedError extends Error {
+  constructor(user_id) {
+    super(`Error: User unauthorized - User._id: ${user_id}`)
+  }
+}
