@@ -1,0 +1,14 @@
+{
+    "id": "/schemaStore-session",
+    "type": "object",
+    "properties": {
+        "email": {
+            "type": "string"
+        }
+    },
+    "anyOf": [
+        {
+            "required": ["email"] 
+        }
+    ]
+}
