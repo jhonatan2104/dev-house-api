@@ -1,0 +1,28 @@
+{
+    "id": "/schemaStore-House",
+    "type": "object",
+    "properties": {
+        "description": {
+            "type": "string"
+        },
+        "price": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string"
+        }
+    },
+    "anyOf": [
+        {
+            "required": [
+                "description", 
+                "price",
+                "location",
+                "status"
+            ]
+        }
+    ]
+}
