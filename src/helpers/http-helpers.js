@@ -1,5 +1,5 @@
-export const badRequest = (error) => ({
-  status: 400,
+export const badRequest = (error, code=400) => ({
+  status: code,
   body: { error }
 });
 
