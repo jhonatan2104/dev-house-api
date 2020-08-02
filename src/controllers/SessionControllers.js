@@ -18,13 +18,13 @@ class SessionControllers {
           if (!user) {
             User.create({ email })
               .then((newUser) => {
-                return res.status(201).json(successRequest(201, newUser));
+                return res.status(201).json(successRequest(newUser, 201));
               })
               .catch((err) => {
                 return res.status(400).json(badRequest("Error in create User"));
               });
           } else {
-            return res.status(200).json(successRequest(200, user));
+            return res.status(200).json(successRequest(user));
           }
         })
         .catch((err) => {

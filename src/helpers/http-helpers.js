@@ -3,7 +3,7 @@ export const badRequest = (error) => ({
   body: { error }
 });
 
-export const successRequest = (code, data) => ({
+export const successRequest = (data, code=200) => ({
     status: code,
     body: { data },
 });
