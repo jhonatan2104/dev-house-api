@@ -119,6 +119,29 @@ class HouseControllers {
       )
     }
   }
+
+  async destroy (rep, res) {
+    const { house_id } = rep.body;
+    const { user_id } = rep.headers;
+    try {
+      const house = await House.findById(house_id);
+      const user = await User.findById(user_id);
+
+      if (String(house.user) === String(user._id)) {
+        await House.findByIdAndDelete({ _id: house_id });
+
+        return res.status(200).json(successRequest('House destroy'))
+      } else {
+        return res.status(401).json(
+          badRequest(new UnauthorizedError(user._id), 401)
+        )
+      }
+    } catch (error) {
+      return res.status(400).json(
+        badRequest(new RequestDatabaseError('findById', '[User, House]'))
+      )
+    }
+  }
 }
 
 export default new HouseControllers();
