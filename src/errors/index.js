@@ -17,3 +17,15 @@ export class UnauthorizedError extends Error {
     super(`Error: User unauthorized - User._id: ${user_id}`)
   }
 }
+
+export class ParseDateError extends Error {
+  constructor (date) {
+    super(`Invalid date attribute: ${date}`);
+  }
+}
+
+export class UnexpectedSituation extends Error {
+  constructor (message) {
+    super(`Unexpected Situation: ${message}`);
+  }
+}
