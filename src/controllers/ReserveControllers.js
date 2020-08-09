@@ -14,6 +14,31 @@ import User from '../models/User';
 // import { Request, Response } from 'express';
 
 class ReserveControllers {
+    index (req, res) {
+      const { user_id } = req.headers;
+
+      if (user_id) {
+        Reserve.find({ user: user_id })
+          .populate('house')
+          .then((reserves) => {
+            return res.status(200).json(
+              successRequest(reserves)
+            );
+          })
+          .catch((err) => {
+            return res.status(400).json(
+              badRequest(new UnexpectedSituation(err.message))
+            );
+          });
+      } else {
+        return res.status(400).json(
+          badRequest(new MissingError('user_id', 'headers'))
+        );
+      }
+
+      
+    }
+
     async store (req, res) {
       const { user_id } = req.headers;
       const { house_id } = req.params;

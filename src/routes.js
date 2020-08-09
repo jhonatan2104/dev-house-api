@@ -21,6 +21,7 @@ router.put('/houses/:house_id', upload.single('thumbnail'), HouseControllers.upd
 router.delete('/houses', HouseControllers.destroy);
 
 router.post('/houses/:house_id/reserve', ReserveControllers.store);
+router.get('/houses/reserve', ReserveControllers.index);
 
 router.get('/dashboard', DashboardControllers.show);
 
