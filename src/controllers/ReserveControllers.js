@@ -4,6 +4,7 @@ import {
   ParseDateError,
   UnexpectedSituation,
   RequestDatabaseError,
+  UnauthorizedError
 } from '../errors';
 import { formatDateISOString } from '../helpers/format-helpers';
 
@@ -37,6 +38,49 @@ class ReserveControllers {
       }
 
       
+    }
+
+    destroy (req, res) {
+      const { user_id } = req.headers;
+      const { reserve_id } = req.body;
+
+      if (user_id && reserve_id) {
+        Reserve.findById(reserve_id)
+          .then((reserve) => {
+            if (reserve) {
+              if (String(user_id) === String(reserve.user)) {
+                Reserve.findByIdAndDelete(reserve_id)
+                  .then(() => {
+                    return res.status(200).json(
+                      successRequest(reserve)
+                    );
+                  })
+                  .catch((err) => {
+                    return res.status(500).json(
+                      badRequest(new UnexpectedSituation(err.message), 500)
+                    );
+                  });
+              } else {
+                return res.status(401).json(
+                  badRequest(new UnauthorizedError(user_id), 401)
+                )
+              }
+            } else {
+              return res.status(400).json(
+                badRequest(new UnexpectedSituation('reserve_id does not match any object in the database'))
+              );
+            }
+          })
+          .catch((err) => {
+            return res.status(500).json(
+              badRequest(new RequestDatabaseError('findById', 'Reserve'), 500)
+            );
+          })
+      } else {
+        return res.status(400).json(
+          badRequest(new MissingError('[user_id, reserve_id]', '[headers, body]'))
+        );
+      }
     }
 
     async store (req, res) {
