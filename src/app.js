@@ -26,6 +26,8 @@ class App {
 
     middlewares () {
       this.server.use(cors());
+
+      // ROUTE TO DEVELOPMENT
       this.server.use(
         '/files', 
         express.static(path.resolve(__dirname, '..', 'uploads'))

@@ -43,12 +43,13 @@ class HouseControllers {
         )
       );
     } else {
-      const { key } = req.file;
+      const { key, location: url } = req.file;
       const { description, price, location, status } = req.body;
       const { user_id } = req.headers;
       if (user_id) {
         House.create({
           thumbnail: key,
+          url,
           description,
           price,
           location,
@@ -89,11 +90,12 @@ class HouseControllers {
               )
             );
           } else {
-            const { key } = req.file;
+            const { key, location: url } = req.file;
             const { description, price, location, status } = req.body;
 
             await House.updateOne({ _id: house_id }, {
               thumbnail: key,
+              url,
               description,
               price,
               location,

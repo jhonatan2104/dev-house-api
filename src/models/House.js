@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const houseSchema = new Schema({
   thumbnail: String,
+  url: String,
   description: String,
   price: Number,
   location: String,
@@ -15,9 +16,5 @@ const houseSchema = new Schema({
     virtuals: true,
   }
 });
-
-houseSchema.virtual("thumbnail_url").get(function() {
-  return `http://localhost:3333/files/${this.thumbnail}`;
-})
 
 export default model('House', houseSchema);

@@ -14,6 +14,7 @@ const storageTypes = {
         const name = path.basename(file.originalname, ext);
 
         file.key = `${name}-${hash}${ext}`;
+        file.location = `http://localhost:3333/files/${file.key}`;
 
         cb(null, file.key);
       } catch (error) {
@@ -41,5 +42,5 @@ const storageTypes = {
 };
 
 export default {
-  storage: storageTypes.s3,
+  storage:  storageTypes.local,
 }
